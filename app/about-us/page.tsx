@@ -57,7 +57,7 @@ const committeeMembers = [
     contact: "singhsamir515@gmail.com",
     linkedin: "https://www.linkedin.com/in/samirsingh-techb9322/",
     website: "https://portfolio5.com",
-    image: "/members/kushal_magar.jpeg", // edit this
+    image: "/members/samir_singh.jpeg",
   },
 
 ];
