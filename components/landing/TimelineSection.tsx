@@ -1,34 +1,28 @@
+"use client";
 import { CheckCircle, Loader, Circle } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import {
+  rawTimelineSteps,
+  getStatus,
+  useToday,
+  type Status,
+} from "@/data/timeline";
 
-const timelineSteps = [
-  {
-    status: "completed",
-    title: "Registration Opens",
-    date: "June 25, 2025",
-    icon: CheckCircle,
-  },
-  {
-    status: "active",
-    title: "Application Review",
-    date: "July 14, 2025",
-    icon: Loader,
-  },
-  {
-    status: "pending",
-    title: "Main Event",
-    date: "July 25-27, 2025",
-    icon: Circle,
-  },
-  {
-    status: "pending",
-    title: "Results & Awards",
-    date: "July 27, 2025",
-    icon: Circle,
-  },
-];
+const iconFor: Record<Status, LucideIcon> = {
+  completed: CheckCircle,
+  active: Loader,
+  pending: Circle,
+};
 
 export function TimelineSection() {
+  const today = useToday();
+
+  const timelineSteps = rawTimelineSteps.map((step) => {
+    const status = getStatus(step, today);
+    return { ...step, status, Icon: iconFor[status] };
+  });
+
   return (
     <section id="timeline" className="py-32 px-4 relative">
       <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900/30 to-black" />
@@ -43,10 +37,10 @@ export function TimelineSection() {
         </div>
         <div className="space-y-12">
           {timelineSteps.map((step, index) => {
-            const Icon = step.icon;
+            const Icon = step.Icon;
             return (
               <div
-                key={index}
+                key={step.title}
                 className="relative flex items-center gap-8 group"
               >
                 {/* Connector Line */}
@@ -105,7 +99,7 @@ export function TimelineSection() {
                           : "Upcoming"}
                       </Badge>
                     </div>
-                    <p className="text-stone-100/80">{step.date}</p>
+                    <p className="text-stone-100/80">{step.displayDate}</p>
                   </div>
                 </div>
               </div>

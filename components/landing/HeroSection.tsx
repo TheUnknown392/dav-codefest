@@ -5,6 +5,15 @@ import { Button } from "@/components/ui/button";
 import { QrCode, FileText } from "lucide-react";
 import Image from "next/image";
 import { useQRFocus } from "@/lib/QRFocusContext";
+import {
+  useToday,
+  getRegistrationState,
+  getCurrentPhase,
+  registration,
+} from "@/data/timeline";
+
+const REGISTRATION_URL =
+  "https://docs.google.com/forms/d/e/1FAIpQLScu7YOzdz3O9q9VH8AuUj4vAKdJLjh6tWrbMnaplqSe8H7g0A/viewform?usp=dialog";
 
 export function HeroSection() {
   const [timeLeft, setTimeLeft] = useState({
@@ -15,8 +24,20 @@ export function HeroSection() {
   });
   const { qrFocused, setQRFocused } = useQRFocus();
 
+  const today = useToday();
+  const regState = getRegistrationState(today);
+  const phase = getCurrentPhase(today);
+  const badgeLabel = phase.step.badge[phase.status];
+
+  const registerLabel =
+      regState === "upcoming"
+      ? `Opens ${registration.opensLabel}`
+      : regState === "open"
+      ? "Register Now"
+      : "Registration Closed";
+    
   useEffect(() => {
-    const targetDate = new Date("2025-07-25T00:00:00+05:45").getTime();
+    const targetDate = new Date("2026-11-25T00:00:00+05:45").getTime();
     const timer = setInterval(() => {
       const now = new Date().getTime();
       const difference = targetDate - now;
@@ -54,12 +75,12 @@ export function HeroSection() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 backdrop-blur-sm mb-6">
             <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
             <span className="text-blue-400 text-sm font-medium">
-              Registration Now Open
+              {badgeLabel}
             </span>
           </div>
         </div>
         <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-[#f2eeef] via-[#3b82f6] to-[#67e8f9] bg-clip-text text-transparent">
-          DAV Codefest 2025
+          DAV Codefest 2026
         </h1>
 
         <p className="text-xl md:text-2xl mb-12 text-gray-300 max-w-4xl mx-auto font-light leading-relaxed">
@@ -93,15 +114,11 @@ export function HeroSection() {
           </Button>
           <Button
             size="lg"
-            className="w-full sm:w-auto group cursor-pointer relative bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold px-12 py-6 text-lg rounded-2xl transition-all duration-300 transform hover:scale-105"
-            onClick={() =>
-              window.open(
-                "https://docs.google.com/forms/d/e/1FAIpQLScu7YOzdz3O9q9VH8AuUj4vAKdJLjh6tWrbMnaplqSe8H7g0A/viewform?usp=dialog",
-                "_blank"
-              )
-            }
+            disabled={regState !== "open"}
+            className="w-full sm:w-auto group cursor-pointer relative bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold px-12 py-6 text-lg rounded-2xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed"
+            onClick={() => window.open(REGISTRATION_URL, "_blank")}
           >
-            <span className="flex items-center gap-2">Register Now</span>
+            <span className="flex items-center gap-2">{registerLabel}</span>
           </Button>
           <a href="/code-of-conduct" className="w-full sm:w-auto inline-block">
             <Button
