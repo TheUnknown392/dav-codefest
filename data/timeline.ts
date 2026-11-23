@@ -45,7 +45,7 @@ export const rawTimelineSteps: RawStep[] = [
     title: "Main Event",
     start: "2026-11-30",
     end: "2026-12-02",
-    displayDate: "November 25 - December 02, 2026",
+    displayDate: "November 30 - December 02, 2026",
     badge: {
       active: "Codefest is happening now",
       pending: "Main event starts November 25, 2026",
