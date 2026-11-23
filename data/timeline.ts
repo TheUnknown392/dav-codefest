@@ -12,7 +12,7 @@ export interface BadgeText {
 export interface RawStep {
   title: string;
   start: string;        // "YYYY-MM-DD"
-  end: string;          // "YYYY-MM-DD" (same as start for single-day steps)
+  end: string;          // "YYYY-MM-DD" 
   displayDate: string;  // shown on the card
   badge: BadgeText;     // shown in the hero's top bar
 }
@@ -20,56 +20,79 @@ export interface RawStep {
 export const rawTimelineSteps: RawStep[] = [
   {
     title: "Registration Opens",
-    start: "2026-06-25",
-    end: "2026-06-25",
-    displayDate: "June 25, 2026",
+    start: "2026-11-10",
+    end: "2026-11-22",
+    displayDate: "November 10, 2026",
     badge: {
       active: "Registration is open",
-      pending: "Registration opens June 25, 2026",
+      pending: "Registration opens November 10, 2026",
       completed: "Registration has opened",
     },
   },
   {
     title: "Application Review",
-    start: "2026-07-14",
-    end: "2026-07-14",
-    displayDate: "July 14, 2026",
+    start: "2026-11-23",
+    end: "2026-11-23",
+    displayDate: "November 23, 2026",
     badge: {
       active: "Applications are being reviewed",
-      pending: "Application review starts July 14, 2026",
+      pending: "Application review starts November 23, 2026",
       completed: "Applications have been reviewed",
     },
   },
   {
     title: "Main Event",
-    start: "2026-07-25",
-    end: "2026-07-27",
-    displayDate: "July 25-27, 2026",
+    start: "2026-11-25",
+    end: "2026-11-27",
+    displayDate: "November 25-27, 2026",
     badge: {
       active: "Codefest is happening now",
-      pending: "Main event starts July 25, 2026",
+      pending: "Main event starts November 25, 2026",
       completed: "Main event is complete",
     },
   },
   {
     title: "Results & Awards",
-    start: "2026-07-27",
-    end: "2026-07-27",
-    displayDate: "July 27, 2026",
+    start: "2026-11-27",
+    end: "2026-11-27",
+    displayDate: "November 27, 2026",
     badge: {
       active: "Results are being announced",
-      pending: "Results announced July 27, 2026",
+      pending: "Results announced November 27, 2026",
       completed: "Codefest 2026 is over",
     },
   },
 ];
 
-// Registration window. "closes" is an assumption (day before Application Review).
+const findStep = (title: string): RawStep => {
+  const step = rawTimelineSteps.find((s) => s.title === title);
+  if (!step) throw new Error(`Timeline is missing a "${title}" step`);
+  return step;
+};
+
+const formatLong = (ymd: string): string =>
+  new Date(`${ymd}T00:00:00Z`).toLocaleDateString("en-US", {
+    timeZone: "UTC",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+
+const dayBefore = (ymd: string): string => {
+  const d = new Date(`${ymd}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() - 1);
+  return d.toISOString().slice(0, 10);
+};
+
+const opensStep = findStep("Registration Opens");
+const reviewStep = findStep("Application Review");
+const closesDate = dayBefore(reviewStep.start);
+
 export const registration = {
-  opens: "2026-06-25",
-  opensLabel: "June 25, 2026",
-  closes: "2026-07-13",
-  closesLabel: "July 13, 2026",
+  opens: opensStep.start,
+  opensLabel: opensStep.displayDate,
+  closes: closesDate,
+  closesLabel: formatLong(closesDate),
 };
 
 // Local date as "YYYY-MM-DD"
@@ -126,3 +149,10 @@ export function useToday(): string {
 
   return today;
 }
+
+export const mainEvent = rawTimelineSteps.find((s) => s.title === "Main Event");
+if (!mainEvent) throw new Error('Timeline is missing a "Main Event" step');
+
+export const countdownTarget = new Date(
+  `${mainEvent.start}T00:00:00+05:45`
+).getTime();

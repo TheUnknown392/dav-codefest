@@ -10,10 +10,11 @@ import {
   getRegistrationState,
   getCurrentPhase,
   registration,
+  countdownTarget,
 } from "@/data/timeline";
 
 const REGISTRATION_URL =
-  "https://docs.google.com/forms/d/e/1FAIpQLScu7YOzdz3O9q9VH8AuUj4vAKdJLjh6tWrbMnaplqSe8H7g0A/viewform?usp=dialog";
+    "https://docs.google.com/forms/d/e/1FAIpQLScu7YOzdz3O9q9VH8AuUj4vAKdJLjh6tWrbMnaplqSe8H7g0A/viewform?usp=dialog";
 
 export function HeroSection() {
   const [timeLeft, setTimeLeft] = useState({
@@ -37,21 +38,22 @@ export function HeroSection() {
       : "Registration Closed";
     
   useEffect(() => {
-    const targetDate = new Date("2026-11-25T00:00:00+05:45").getTime();
-    const timer = setInterval(() => {
-      const now = new Date().getTime();
-      const difference = targetDate - now;
+    const tick = () => {
+      const difference = countdownTarget - Date.now();
       if (difference > 0) {
         setTimeLeft({
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor(
-            (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-          ),
-          minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds: Math.floor((difference % (1000 * 60)) / 1000),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / (1000 * 60)) % 60),
+          seconds: Math.floor((difference / 1000) % 60),
         });
+      } else {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       }
-    }, 1000);
+    };
+  
+    tick();
+    const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
   }, []);
 
