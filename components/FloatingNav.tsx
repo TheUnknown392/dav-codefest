@@ -4,20 +4,71 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useQRFocus } from "@/lib/QRFocusContext";
+import {
+  registration,
+  getRegistrationState,
+  useToday,
+} from "@/data/timeline";
 
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about-us" },
   { label: "Code of Conduct", href: "/code-of-conduct" },
-  {
-    label: "Register Now",
-    href: "https://docs.google.com/forms/d/e/1FAIpQLScu7YOzdz3O9q9VH8AuUj4vAKdJLjh6tWrbMnaplqSe8H7g0A/viewform",
-  },
 ];
+
+function RegisterButton({
+  open,
+  label,
+  url,
+  className,
+  onClick,
+}: {
+  open: boolean;
+  label: string;
+  url: string;
+  className: string;
+  onClick?: () => void;
+}) {
+  const stateClasses = open
+    ? ""
+    : "opacity-40 grayscale cursor-not-allowed pointer-events-none";
+  const classes = `bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold transition-all duration-300 ${className} ${stateClasses}`;
+
+  if (!open) {
+    return (
+      <span aria-disabled="true" className={classes}>
+        {label}
+      </span>
+    );
+  }
+
+  return (
+    <a
+      href={url}
+      className={classes}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={onClick}
+    >
+      {label}
+    </a>
+  );
+}
 
 export default function FloatingNav() {
   const [isOpen, setIsOpen] = useState(false);
   const { qrFocused } = useQRFocus();
+
+  // Hooks must run before the early return below.
+  const today = useToday();
+  const regState = getRegistrationState(today);
+  const regOpen = regState === "open";
+  const registerLabel =
+    regState === "upcoming"
+      ? `Opens ${registration.opensLabel}`
+      : regState === "open"
+      ? "Register Now"
+      : "Registration Closed";
 
   if (qrFocused) return null;
 
@@ -37,27 +88,21 @@ export default function FloatingNav() {
               className="h-8 w-auto"
             />
           </Link>
-          {navLinks.map((link) =>
-            link.label === "Register Now" ? (
-              <a
-                key={link.href}
-                href={link.href}
-                className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {link.label}
-              </a>
-            ) : (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-[#e7e5e4cc] font-medium text-sm px-3 py-1 rounded-md transition-colors hover:text-blue-500"
-              >
-                {link.label}
-              </Link>
-            )
-          )}
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-[#e7e5e4cc] font-medium text-sm px-3 py-1 rounded-md transition-colors hover:text-blue-500"
+            >
+              {link.label}
+            </Link>
+          ))}
+          <RegisterButton
+            open={regOpen}
+            label={registerLabel}
+            url={registration.url}
+            className="px-4 py-2 rounded-lg"
+          />
         </div>
       </nav>
 
@@ -93,29 +138,23 @@ export default function FloatingNav() {
               className="h-8 w-auto mb-6"
             />
           </Link>
-          {navLinks.map((link) =>
-            link.label === "Register Now" ? (
-              <a
-                key={link.href}
-                href={link.href}
-                className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold mt-2 px-4 py-3 rounded-xl block w-full transition-colors"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={toggleDrawer}
-              >
-                {link.label}
-              </a>
-            ) : (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-white/80 text-base font-medium px-4 py-3 rounded-xl block w-full transition-colors hover:bg-white/10"
-                onClick={toggleDrawer}
-              >
-                {link.label}
-              </Link>
-            )
-          )}
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-white/80 text-base font-medium px-4 py-3 rounded-xl block w-full transition-colors hover:bg-white/10"
+              onClick={toggleDrawer}
+            >
+              {link.label}
+            </Link>
+          ))}
+          <RegisterButton
+            open={regOpen}
+            label={registerLabel}
+            url={registration.url}
+            className="mt-2 px-4 py-3 rounded-xl block w-full"
+            onClick={toggleDrawer}
+          />
         </nav>
       </div>
     </>

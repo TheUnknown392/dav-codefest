@@ -13,8 +13,6 @@ import {
   countdownTarget,
 } from "@/data/timeline";
 
-const REGISTRATION_URL =
-    "https://docs.google.com/forms/d/e/1FAIpQLScu7YOzdz3O9q9VH8AuUj4vAKdJLjh6tWrbMnaplqSe8H7g0A/viewform?usp=dialog";
 
 export function HeroSection() {
   const [timeLeft, setTimeLeft] = useState({
@@ -103,7 +101,7 @@ export function HeroSection() {
               </div>
             </div>
           ))}
-        </div>
+      </div>
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center w-full max-w-md mx-auto">
           <Button
             size="lg"
@@ -118,7 +116,7 @@ export function HeroSection() {
             size="lg"
             disabled={regState !== "open"}
             className="w-full sm:w-auto group cursor-pointer relative bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold px-12 py-6 text-lg rounded-2xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed"
-            onClick={() => window.open(REGISTRATION_URL, "_blank")}
+            onClick={() => window.open(registration.url, "_blank")}
           >
             <span className="flex items-center gap-2">{registerLabel}</span>
           </Button>

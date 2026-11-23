@@ -25,7 +25,7 @@ export const rawTimelineSteps: RawStep[] = [
     end: "2026-11-25",
     displayDate: "November 10, 2026",
     badge: {
-      active: "Registration is open",
+      active: "Registration is open until November 25",
       pending: "Registration opens November 10, 2026",
       completed: "Registration has opened",
     },
@@ -82,6 +82,7 @@ const formatLong = (ymd: string): string =>
 const opensStep = findStep("Registration Opens");
 
 export const registration = {
+  url: "https://docs.google.com/forms/d/e/1FAIpQLScu7YOzdz3O9q9VH8AuUj4vAKdJLjh6tWrbMnaplqSe8H7g0A/viewform?usp=dialog",
   opensDate: opensStep.start,            // "YYYY-MM-DD", for comparisons
   opens: formatLong(opensStep.start),
   opensLabel: opensStep.displayDate,
