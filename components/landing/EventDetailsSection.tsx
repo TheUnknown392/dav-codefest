@@ -18,7 +18,7 @@ export function EventDetailsSection() {
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-stone-100/10 border border-primary/20 backdrop-blur-sm mb-8">
               <Calendar className="h-4 w-4 text-stone-100/80" />
               <span className="text-stone-100/80 text-sm font-medium">
-                July 25-27, 2025
+                July 25-27, 2026
               </span>
             </div>
             <h2 className="text-5xl md:text-6xl font-bold mb-8 leading-tight">

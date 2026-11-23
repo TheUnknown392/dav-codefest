@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "D.A.V Codefest 2025",
-  description: "D.A.V Codefest 2025 official website",
+  title: "D.A.V Codefest 2026",
+  description: "D.A.V Codefest 2026 official website",
   icons: {
     icon: "/logo2.svg",
   },

@@ -7,14 +7,14 @@ export function FooterSection() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-12">
           <div>
             <h3 className="text-3xl font-bold text-[#f2eeef] mb-4">
-              DAV CodeFest 2025
+              DAV CodeFest 2026
             </h3>
             <p className="text-stone-100/80 mb-4 max-w-md">
               Organized by DAV IT Club. Building the future, one line of code at
               a time.
             </p>
             <div className="text-sm text-stone-100/80">
-              © 2025 DAV College. All rights reserved.
+              © 2026 DAV College. All rights reserved.
             </div>
           </div>
           <div className="flex flex-row flex-wrap justify-center items-center gap-6 md:gap-8">
