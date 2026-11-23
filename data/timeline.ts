@@ -12,16 +12,17 @@ export interface BadgeText {
 export interface RawStep {
   title: string;
   start: string;        // "YYYY-MM-DD"
-  end: string;          // "YYYY-MM-DD" 
+  end: string;          // "YYYY-MM-DD"
   displayDate: string;  // shown on the card
   badge: BadgeText;     // shown in the hero's top bar
 }
 
+// inclusive dates
 export const rawTimelineSteps: RawStep[] = [
   {
     title: "Registration Opens",
     start: "2026-11-10",
-    end: "2026-11-22",
+    end: "2026-11-25",
     displayDate: "November 10, 2026",
     badge: {
       active: "Registration is open",
@@ -31,8 +32,8 @@ export const rawTimelineSteps: RawStep[] = [
   },
   {
     title: "Application Review",
-    start: "2026-11-23",
-    end: "2026-11-23",
+    start: "2026-11-26",
+    end: "2026-11-29",
     displayDate: "November 23, 2026",
     badge: {
       active: "Applications are being reviewed",
@@ -42,9 +43,9 @@ export const rawTimelineSteps: RawStep[] = [
   },
   {
     title: "Main Event",
-    start: "2026-11-25",
-    end: "2026-11-27",
-    displayDate: "November 25-27, 2026",
+    start: "2026-11-30",
+    end: "2026-12-02",
+    displayDate: "November 25 - December 02, 2026",
     badge: {
       active: "Codefest is happening now",
       pending: "Main event starts November 25, 2026",
@@ -53,9 +54,9 @@ export const rawTimelineSteps: RawStep[] = [
   },
   {
     title: "Results & Awards",
-    start: "2026-11-27",
-    end: "2026-11-27",
-    displayDate: "November 27, 2026",
+    start: "2026-12-02",
+    end: "2026-12-02",
+    displayDate: "December 02, 2026",
     badge: {
       active: "Results are being announced",
       pending: "Results announced November 27, 2026",
@@ -78,21 +79,14 @@ const formatLong = (ymd: string): string =>
     year: "numeric",
   });
 
-const dayBefore = (ymd: string): string => {
-  const d = new Date(`${ymd}T00:00:00Z`);
-  d.setUTCDate(d.getUTCDate() - 1);
-  return d.toISOString().slice(0, 10);
-};
-
 const opensStep = findStep("Registration Opens");
-const reviewStep = findStep("Application Review");
-const closesDate = dayBefore(reviewStep.start);
 
 export const registration = {
-  opens: opensStep.start,
+  opensDate: opensStep.start,            // "YYYY-MM-DD", for comparisons
+  opens: formatLong(opensStep.start),
   opensLabel: opensStep.displayDate,
-  closes: closesDate,
-  closesLabel: formatLong(closesDate),
+  closes: opensStep.end,                 // "YYYY-MM-DD", inclusive
+  closesLabel: formatLong(opensStep.end),
 };
 
 // Local date as "YYYY-MM-DD"
@@ -130,7 +124,7 @@ export function getCurrentPhase(today: string): CurrentPhase {
 }
 
 export function getRegistrationState(today: string): RegistrationState {
-  if (today < registration.opens) return "upcoming";
+  if (today < registration.opensDate) return "upcoming";
   if (today > registration.closes) return "closed";
   return "open";
 }

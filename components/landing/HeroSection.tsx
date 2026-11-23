@@ -38,7 +38,7 @@ export function HeroSection() {
       : "Registration Closed";
     
   useEffect(() => {
-    const tick = () => {
+    const tick = () => { // contdown to main event
       const difference = countdownTarget - Date.now();
       if (difference > 0) {
         setTimeLeft({
