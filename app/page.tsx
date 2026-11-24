@@ -1,5 +1,6 @@
 import { HeroSection } from "@/components/landing/HeroSection";
 import { FeaturesSection } from "@/components/landing/FeaturesSection";
+import { GallerySection } from "@/components/landing/GallerySection";
 import { EventDetailsSection } from "@/components/landing/EventDetailsSection";
 import { TimelineSection } from "@/components/landing/TimelineSection";
 import { EligibilitySection } from "@/components/landing/EligibilitySection";
@@ -13,6 +14,7 @@ export default function Home() {
     <div className="min-h-screen text-[#f2eeef] overflow-hidden">
       <HeroSection />
       <FeaturesSection />
+      <GallerySection />
       <EventDetailsSection />
       <TimelineSection />
       <EligibilitySection />
