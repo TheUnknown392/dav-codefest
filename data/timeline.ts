@@ -81,8 +81,21 @@ const formatLong = (ymd: string): string =>
 
 const opensStep = findStep("Registration Opens");
 
+export const isMainEvent = (today: string = todayString()): boolean => {
+  const mainEvent = rawTimelineSteps.find((s) => s.title === "Main Event");
+  if (!mainEvent) throw new Error('Timeline is missing a "Main Event" step');
+
+  return getStatus(mainEvent, today) === "active";
+};
+
+if(isMainEvent(todayString())){
+    console.log("is main event");
+}else{
+    console.log("is not main event");
+}
+
 export const registration = {
-  url: "https://docs.google.com/forms/d/e/1FAIpQLScu7YOzdz3O9q9VH8AuUj4vAKdJLjh6tWrbMnaplqSe8H7g0A/viewform?usp=dialog",
+  url: "https://docs.google.com/forms/d/e/1FAIpQLScu7YOzdz3O9q9VH8AuUj4vAKdJLjh6tWrbMnaplqSe8H7g0A/viewform?usp=dialog", // todo
   opensDate: opensStep.start,            // "YYYY-MM-DD", for comparisons
   opens: formatLong(opensStep.start),
   opensLabel: opensStep.displayDate,

@@ -8,13 +8,17 @@ import {
   registration,
   getRegistrationState,
   useToday,
+  isMainEvent,
+  todayString
 } from "@/data/timeline";
 
-const navLinks = [
+const defaultLinks = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about-us" },
   { label: "Code of Conduct", href: "/code-of-conduct" },
 ];
+
+const scheduleLink = { label: "Schedule", href: "/schedule" };
 
 function RegisterButton({
   open,
@@ -59,7 +63,6 @@ export default function FloatingNav() {
   const [isOpen, setIsOpen] = useState(false);
   const { qrFocused } = useQRFocus();
 
-  // Hooks must run before the early return below.
   const today = useToday();
   const regState = getRegistrationState(today);
   const regOpen = regState === "open";
@@ -68,7 +71,11 @@ export default function FloatingNav() {
       ? `Opens ${registration.opensLabel}`
       : regState === "open"
       ? "Register Now"
-      : "Registration Closed";
+        : "Registration Closed";
+    
+  const navLinks = isMainEvent(today)
+      ? [...defaultLinks, scheduleLink]
+      : defaultLinks;
 
   if (qrFocused) return null;
 
@@ -97,6 +104,7 @@ export default function FloatingNav() {
               {link.label}
             </Link>
           ))}
+          
           <RegisterButton
             open={regOpen}
             label={registerLabel}
